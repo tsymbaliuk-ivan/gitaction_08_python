@@ -29,6 +29,11 @@ jobs:
       - name: Run unit tests
         run: python -m unittest discover
 
+      - name: Set up Git
+        run: | 
+          git config --global user.email "tsymbaliuk.nau@gmail.com"
+          git config --global user.name "tsymbaliuk-ivan"
+
       - name: Create new branch
         run: git checkout -b feature-branch
 
