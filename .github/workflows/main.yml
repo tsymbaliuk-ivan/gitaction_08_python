@@ -6,8 +6,12 @@ on:
       - main
       - slave
       - slave2
+
   pull_request:
-    types: [opened, synchronize]
+    types:
+      - opened
+      - synchronize
+
   workflow_dispatch:
 
 jobs:
@@ -28,44 +32,3 @@ jobs:
 
       - name: Run unit tests
         run: python -m unittest discover
-
-      - name: Set up Git
-        run: | 
-          git config --global user.email "tsymbaliuk.nau@gmail.com"
-          git config --global user.name "tsymbaliuk-ivan"
-
-      - name: Create new branch
-        run: git checkout -b feature-branch
-
-      - name: Make changes to code
-        run: |
-          # Make changes to code here
-
-      - name: Commit changes
-        run: |
-          git add .
-          git commit -m "Update code"
-          git push origin feature-branch
-
-      - name: Create Pull Request
-        uses: peter-evans/create-pull-request@v3
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          commit-message: "Update code"
-          title: "Update code"
-          body: "This PR updates the code."
-          branch: feature-branch
-          base: main
-
-      - name: Merge Pull Request
-        uses: actions/github-script@v6
-        with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          script: |
-            const pr_number = context.payload.pull_request.number;
-            const response = await github.pulls.merge({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              pull_number: pr_number
-            });
-            console.log(response);
